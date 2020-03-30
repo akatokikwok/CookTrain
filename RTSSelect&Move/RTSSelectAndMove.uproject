@@ -1,0 +1,16 @@
+{
+	"FileVersion": 3,
+	"EngineAssociation": "{442D1C41-466F-B22A-6797-D7A04848810C}",
+	"Category": "",
+	"Description": "",
+	"Modules": [
+		{
+			"Name": "RTSSelectAndMove",
+			"Type": "Runtime",
+			"LoadingPhase": "Default",
+			"AdditionalDependencies": [
+				"Engine"
+			]
+		}
+	]
+}
