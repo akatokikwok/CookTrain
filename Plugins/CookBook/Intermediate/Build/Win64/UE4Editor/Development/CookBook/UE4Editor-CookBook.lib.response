@@ -1,0 +1,14 @@
+/NOLOGO
+/errorReport:prompt
+/MACHINE:x64
+/SUBSYSTEM:WINDOWS
+/DEF
+/NAME:"UE4Editor-CookBook.dll"
+/IGNORE:4221
+/NODEFAULTLIB
+"E:\Program_Files\UnrealEngine-4.22\Engine\Intermediate\Build\Win64\UE4Editor\Development\Engine\SharedPCH.Engine.h.obj"
+"E:\Projects\CookTrain\Plugins\CookBook\Intermediate\Build\Win64\UE4Editor\Development\CookBook\Module.CookBook.cpp.obj"
+"E:\Projects\CookTrain\Plugins\CookBook\Intermediate\Build\Win64\UE4Editor\Development\CookBook\Module.CookBook.gen.cpp.obj"
+"E:\Program_Files\UnrealEngine-4.22\Engine\Intermediate\Build\Win64\UE4Editor\Development\Default.rc2.res"
+/OUT:"E:\Projects\CookTrain\Plugins\CookBook\Intermediate\Build\Win64\UE4Editor\Development\CookBook\UE4Editor-CookBook.lib"
+/INCLUDE:IMPLEMENT_MODULE_CookBook

@@ -1,0 +1,24 @@
+{
+	"FileVersion": 3,
+	"EngineAssociation": "{D025B59B-4A77-C663-A82A-0DB64250ACFD}",
+	"Category": "",
+	"Description": "",
+	"Modules": [
+		{
+			"Name": "CookTrain",
+			"Type": "Runtime",
+			"LoadingPhase": "Default"
+		}
+		,
+		{
+			"Name":"CookTrainEditor",
+			"Type":"Editor",
+			"LoadingPhase":"PostEngineInit",
+			"AdditionalDependencies":[
+				"Engine",
+				"CoreUObject"
+
+			]
+		}
+	]
+}

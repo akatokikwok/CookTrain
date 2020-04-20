@@ -1,0 +1,33 @@
+// Fill out your copyright notice in the Description page of Project Settings.
+
+#pragma once
+
+#include "CoreMinimal.h"
+#include "Engine/StaticMeshActor.h"
+#include "Interactable.h"
+#include "Openable.h"
+#include "DoorBell.generated.h"
+
+/**
+ * 
+ */
+UCLASS()
+class COOKBOOK_API ADoorBell : public AStaticMeshActor,public IInteractable
+{
+	GENERATED_BODY()
+
+public:
+	ADoorBell();
+
+	virtual bool Can_Interact_Implementation() override;
+
+	virtual void PerformInteract_Implementation() override;
+
+	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category="which door?")
+	AActor* DoorToOpen;
+
+private:
+	bool HasBeenPushed;
+
+	
+};
