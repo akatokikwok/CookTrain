@@ -1,0 +1,8 @@
+{
+	"BuildId": "097b50d8-268c-4357-be02-e58e27b3a170",
+	"Modules": 
+	{
+		"CompoundUI": "UE4Editor-CompoundUI.dll",
+		"CompoundUIEditor": "UE4Editor-CompoundUIEditor.dll"
+	}
+}
