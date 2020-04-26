@@ -9,12 +9,15 @@
 /**
  * 
  */
-UCLASS()
+UCLASS(Blueprintable,BlueprintType,EditInlineNew)//更换UClass的说明符
 class COMPOUNDUIEDITOR_API UMyCustomAsset : public UObject
 {
 	GENERATED_BODY()
 public:
-	UPROPERTY(EditAnywhere,Category="CustomAsset")
+	UPROPERTY(EditAnywhere,Category="Custom Asset")
 	FString Name;
+
+	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category="Custom Asset")
+	FString ColorName;
 	
 };

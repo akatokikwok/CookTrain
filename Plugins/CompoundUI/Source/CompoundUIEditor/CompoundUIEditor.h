@@ -1,6 +1,5 @@
 ﻿#pragma once
 
-
 #include "Engine.h"
 #include "Modules/ModuleInterface.h"
 #include "Modules/ModuleManager.h"
@@ -8,8 +7,8 @@
 
 #include "CookTrainCommands.h"
 #include "Editor/MainFrame/Public/Interfaces/IMainFrameModule.h"
-#include "Developer/AssetTools/Public/IAssetTypeActions.h"
-
+#include "Developer/AssetTools/Public/IAssetTypeActions.h"
+#include "CompoundUIEditor/GraphPin/MyCustomAssetPinFactory.h"
 
 class FCompoundUIEditorModule : public IModuleInterface
 {
@@ -17,11 +16,16 @@ class FCompoundUIEditorModule : public IModuleInterface
 	virtual void ShutdownModule() override;
 
 public:
-	
+
 	TArray< TSharedPtr<IAssetTypeActions> > CreatedAssetTypeActions;
 
 	TSharedPtr<FExtender> ToolbarExtender;
 	TSharedPtr<const FExtensionBase> Extension;
+
+	IConsoleCommand* DisplayTestCommand;
+	IConsoleCommand* DisplayUserSpecifiedWindow;
+
+	TSharedPtr<FMyCustomAssetPinFactory> PinFactory;
 
 public:
 	void XinchuangkouButton_Clicked()
@@ -30,10 +34,24 @@ public:
 			.Title(FText::FromString(TEXT("Cooked New Window")))
 			.ClientSize(FVector2D(800, 400))
 			.SupportsMaximize(false)
-			.SupportsMinimize(false)			[				SNew(SVerticalBox)				+SVerticalBox::Slot().HAlign(HAlign_Center).VAlign(VAlign_Center)				[					SNew(STextBlock).Text(FText::FromString(TEXT("this is a slate test textblock")))				]						];		IMainFrameModule&  MainFrameModule =FModuleManager::LoadModuleChecked<IMainFrameModule>(TEXT("MainFrame"));		if (MainFrameModule.GetParentWindow().IsValid())
+			.SupportsMinimize(false)
+			[
+				SNew(SVerticalBox)
+				+ SVerticalBox::Slot().HAlign(HAlign_Center).VAlign(VAlign_Center)
+			[
+				SNew(STextBlock).Text(FText::FromString(TEXT("this is a slate test textblock")))
+			]
+			];
+
+		IMainFrameModule&  MainFrameModule = FModuleManager::LoadModuleChecked<IMainFrameModule>(TEXT("MainFrame"));
+		if (MainFrameModule.GetParentWindow().IsValid())
 		{
-			FSlateApplication::Get().AddWindowAsNativeChild(CookedNewWindow,MainFrameModule.GetParentWindow().ToSharedRef());
-		}		else		{			FSlateApplication::Get().AddWindow(CookedNewWindow);		}
+			FSlateApplication::Get().AddWindowAsNativeChild(CookedNewWindow, MainFrameModule.GetParentWindow().ToSharedRef());
+		}
+		else
+		{
+			FSlateApplication::Get().AddWindow(CookedNewWindow);
+		}
 	};
 
 	void AddToolbarExtension(FToolBarBuilder& builder)
@@ -47,8 +65,8 @@ public:
 			FText::FromString("My XinchuangkouButton"),
 			FText::FromString("Click this Button to display a new Blank Windows"),
 			Icon,
-			NAME_None		
-		);		
+			NAME_None
+		);
 	};
 
 	void AddMenuExtension(FMenuBuilder &builder)
@@ -58,5 +76,29 @@ public:
 				"LevelEditor.ViewOptions",
 				"LevelEditor.ViewOptions.Small");
 		builder.AddMenuEntry(FCookTrainCommands::Get().XinchuangkouButton);
-	};
+	};
+
+
+	void DisplayWindow(FString WindowTitle)
+	{
+		TSharedRef<SWindow> CookbookWindow = SNew(SWindow)
+			.Title(FText::FromString(WindowTitle))
+			.ClientSize(FVector2D(800, 400))
+			.SupportsMaximize(false)
+			.SupportsMinimize(false);
+		IMainFrameModule& MainFrameModule = FModuleManager::LoadModuleChecked<IMainFrameModule>(TEXT("MainFrame"));
+		if (MainFrameModule.GetParentWindow().IsValid())
+		{
+			FSlateApplication::Get().AddWindowAsNativeChild
+			(CookbookWindow, MainFrameModule.GetParentWindow()
+				.ToSharedRef());
+		}
+		else
+		{
+			FSlateApplication::Get().AddWindow(CookbookWindow);
+		}
+	};
+
+
+
 };

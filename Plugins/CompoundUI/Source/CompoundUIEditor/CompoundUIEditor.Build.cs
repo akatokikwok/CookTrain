@@ -25,8 +25,13 @@ public class CompoundUIEditor : ModuleRules
             {
                 "Core",//"UnrealEd","LevelEditor","Projects",
 				// ... add other public dependencies that you statically link with here ...
+                "GraphEditor",
+                "Engine",
+                "UnrealEd",
+                "AppFramework"
 
-               
+
+
             }
             );
 
@@ -38,8 +43,9 @@ public class CompoundUIEditor : ModuleRules
                 "InputCore", "RHI", "RenderCore",
                 "CoreUObject","LevelEditor","Projects",
                 "MainFrame",
-                "UnrealEd",
+                
                 "AssetTools",
+
 
 
 

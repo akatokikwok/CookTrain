@@ -16,7 +16,7 @@ void FMyCustomAssetActions::GetActions(const TArray<UObject*>& InObjects, FMenuB
 		FSlateIcon(FEditorStyle::GetStyleSetName(),"LevelEditor.ViewOptions"),
 		FUIAction(
 			FExecuteAction::CreateRaw(this,&FMyCustomAssetActions::MyCustomAssetContext_Clicked),
-			FCanExecuteAction()
+		FCanExecuteAction()
 		)	);
 }
 

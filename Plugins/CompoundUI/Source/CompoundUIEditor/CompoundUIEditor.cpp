@@ -11,6 +11,11 @@
 #include "Developer/AssetTools/Public/IAssetTools.h"
 #include "Developer/AssetTools/Public/AssetToolsModule.h"
 #include "CompoundUIEditor\MyCustomAssetActions.h"
+#include "Editor\UnrealEd\Public\EdGraphUtilities.h"
+
+#include "Editor\PropertyEditor\Public\PropertyEditorModule.h"
+#include "CompoundUIEditor\DetailPanelCustomize\MyCustomAssetDetailsCustomization.h"
+#include "CompoundUIEditor\GraphPin\MyCustomAssetPinFactory.h"
 
 IMPLEMENT_GAME_MODULE(FCompoundUIEditorModule, CompoundUIEditor)
 
@@ -54,6 +59,53 @@ void FCompoundUIEditorModule::StartupModule()
 	LevelEditorModule.GetMenuExtensibilityManager()->AddExtender(ToolbarExtender);
 
 
+	//
+	DisplayTestCommand = IConsoleManager::Get().RegisterConsoleCommand
+	(
+		TEXT("DisplayTestCommandWindow"),
+		TEXT("test"),
+		FConsoleCommandDelegate::CreateRaw(	this, &FCompoundUIEditorModule::DisplayWindow, FString(TEXT("Test Command Window")) ),
+		ECVF_Default
+	);
+
+	DisplayUserSpecifiedWindow = IConsoleManager::Get().RegisterConsoleCommand//使用Get()静态函数，获得IConsoleManager的模块实例，类似于单例模式
+	(
+		TEXT("DisplayWindow"),//用户可以键入的真实命令行
+		TEXT("test"),
+		FConsoleCommandWithArgsDelegate::CreateLambda
+		(
+			[&](const TArray< FString >& Args)
+			{
+				FString WindowTitle;
+				for (FString Arg : Args)
+				{
+					WindowTitle += Arg;
+					WindowTitle.AppendChar(' ');
+				}
+				this->DisplayWindow(WindowTitle);
+			}
+		),
+		ECVF_Default
+		);
+
+
+
+		PinFactory=MakeShareable(new FMyCustomAssetPinFactory());
+		FEdGraphUtilities::RegisterVisualPinFactory(PinFactory);
+
+
+		//
+		FPropertyEditorModule& PropertyModule = FModuleManager::LoadModuleChecked<FPropertyEditorModule>("PropertyEditor");
+		PropertyModule.RegisterCustomClassLayout(
+			UMyCustomAsset::StaticClass()->GetFName(), 
+			FOnGetDetailCustomizationInstance::CreateStatic(&FMyCustomAssetDetailCustomization::MakeInstance)
+			);
+		PropertyModule.RegisterCustomPropertyTypeLayout(
+			UMyCustomAsset::StaticClass()->GetFName(), 
+			FOnGetPropertyTypeCustomizationInstance::CreateStatic(&FMyCustomAssetPropertyDetails::MakeInstance)
+			);
+
+		
 
 }
 
@@ -67,5 +119,21 @@ void FCompoundUIEditorModule::ShutdownModule()
 	for (auto Action : CreatedAssetTypeActions)
 	{
 		AssetTools.UnregisterAssetTypeActions(Action.ToSharedRef());
-	}
+	}	//	if (DisplayTestCommand)
+	{
+		IConsoleManager::Get().UnregisterConsoleObject(DisplayTestCommand);
+		DisplayTestCommand = nullptr;
+	}
+	if (DisplayUserSpecifiedWindow)
+	{
+		IConsoleManager::Get().UnregisterConsoleObject(DisplayUserSpecifiedWindow);
+		DisplayUserSpecifiedWindow = nullptr;
+	}	////	FEdGraphUtilities::UnregisterVisualPinFactory(PinFactory); 
+	PinFactory.Reset();
+
+	//
+	FPropertyEditorModule& PropertyModule = FModuleManager::LoadModuleChecked<FPropertyEditorModule>("PropertyEditor");
+	PropertyModule.UnregisterCustomClassLayout(UMyCustomAsset::StaticClass()->GetFName());
+	
+	
 }
